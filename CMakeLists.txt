@@ -21,7 +21,7 @@ endif ()
 
 add_subdirectory (src/OpenMesh/Core)
 add_subdirectory (src/OpenMesh/Tools)
-add_subdirectory (src/OpenMesh/Apps)
+#add_subdirectory (src/OpenMesh/Apps)
 add_subdirectory (Doc)
 
 # ========================================================================
@@ -44,13 +44,13 @@ endif(WIN32)
 
 if (APPLE)
   # prepare bundle generation cmake file and add a build target for it
-  configure_file ("${CMAKE_SOURCE_DIR}/cmake/fixbundle.cmake.in"
-     "${CMAKE_BINARY_DIR}/fixbundle.cmake" @ONLY IMMEDIATE)
-  add_custom_target (fixbundle ALL
-    COMMAND ${CMAKE_COMMAND} -P "${CMAKE_BINARY_DIR}/fixbundle.cmake"
-  )
+  #configure_file ("${CMAKE_SOURCE_DIR}/cmake/fixbundle.cmake.in"
+  #   "${CMAKE_BINARY_DIR}/fixbundle.cmake" @ONLY IMMEDIATE)
+  #add_custom_target (fixbundle ALL
+  #  COMMAND ${CMAKE_COMMAND} -P "${CMAKE_BINARY_DIR}/fixbundle.cmake"
+  #)
   # let bundle generation depend on all targets
-  add_dependencies (fixbundle DecimaterGui ProgViewer QtViewer SubdividerGui) 
+  #add_dependencies (fixbundle DecimaterGui ProgViewer QtViewer SubdividerGui) 
 
 
   # Required for Snow leopard, and the latest qt. Then the resources have to be copied
