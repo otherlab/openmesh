@@ -19,6 +19,10 @@ if (WIN32)
   )
 endif ()
 
+add_definitions(
+    -DOM_FORCE_STATIC_CAST
+)
+
 add_subdirectory (src/OpenMesh/Core)
 add_subdirectory (src/OpenMesh/Tools)
 #add_subdirectory (src/OpenMesh/Apps)
