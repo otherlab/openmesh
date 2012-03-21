@@ -134,6 +134,7 @@ class HeapT : private std::vector<HeapEntry>
 {
 private: 
   typedef std::vector<HeapEntry>            Base;
+  using Base::push_back;
   
 public:
 

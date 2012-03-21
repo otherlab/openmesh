@@ -70,6 +70,9 @@ template <class MeshItems, class Connectivity>
 class AttribKernelT : public Connectivity
 {
 public:
+  using Connectivity::property;
+  using Connectivity::add_property;
+  using Connectivity::remove_property;
 
   //---------------------------------------------------------------- item types
 

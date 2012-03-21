@@ -87,6 +87,20 @@ template <class Kernel>
 class PolyMeshT : public Kernel
 {
 public:
+  using Kernel::set_point;
+  using Kernel::set_normal;
+  using Kernel::cfv_iter;
+  using Kernel::cvf_iter;
+  using Kernel::point;
+  using Kernel::normal;
+  using Kernel::halfedge_handle;
+  using Kernel::to_vertex_handle;
+  using Kernel::from_vertex_handle;
+  using Kernel::next_halfedge_handle;
+  using Kernel::opposite_halfedge_handle;
+  using Kernel::is_boundary;
+  using Kernel::face_handle;
+  using Kernel::edge_handle;
 
   /// Self type. Used to specify iterators/circulators.
   typedef PolyMeshT<Kernel>                   This;
