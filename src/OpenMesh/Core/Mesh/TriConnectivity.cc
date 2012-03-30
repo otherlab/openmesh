@@ -48,6 +48,9 @@
 namespace OpenMesh
 {
 
+TriConnectivity::TriConnectivity() {}
+TriConnectivity::~TriConnectivity() {}
+
 TriConnectivity::FaceHandle
 TriConnectivity::add_face(const VertexHandle* _vertex_handles, uint _vhs_size)
 {

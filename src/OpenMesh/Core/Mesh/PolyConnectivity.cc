@@ -50,6 +50,9 @@ const PolyConnectivity::HalfedgeHandle  PolyConnectivity::InvalidHalfedgeHandle;
 const PolyConnectivity::EdgeHandle      PolyConnectivity::InvalidEdgeHandle;
 const PolyConnectivity::FaceHandle      PolyConnectivity::InvalidFaceHandle;
 
+PolyConnectivity::PolyConnectivity()  {}
+PolyConnectivity::~PolyConnectivity() {}
+
 //-----------------------------------------------------------------------------
 PolyConnectivity::HalfedgeHandle
 PolyConnectivity::find_halfedge(VertexHandle _start_vh, VertexHandle _end_vh ) const

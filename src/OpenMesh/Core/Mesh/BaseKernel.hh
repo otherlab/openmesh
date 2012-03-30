@@ -92,14 +92,8 @@ class BaseKernel
 {
 public: //-------------------------------------------- constructor / destructor
 
-  BaseKernel() {}
-  virtual ~BaseKernel() {
-	vprops_.clear();
-	eprops_.clear();
-	hprops_.clear();
-	fprops_.clear();
-  }
-
+  BaseKernel();
+  virtual ~BaseKernel();
 
 public: //-------------------------------------------------- add new properties
 

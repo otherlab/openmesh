@@ -43,6 +43,15 @@
 namespace OpenMesh
 {
 
+BaseKernel::BaseKernel() {}
+
+BaseKernel::~BaseKernel() {
+	vprops_.clear();
+	eprops_.clear();
+	hprops_.clear();
+	fprops_.clear();
+}
+
 void BaseKernel::property_stats(std::ostream& _ostr) const
 {
   const PropertyContainer::Properties& vps = vprops_.properties();

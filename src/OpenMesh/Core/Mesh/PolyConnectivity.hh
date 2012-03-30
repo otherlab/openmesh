@@ -161,8 +161,8 @@ public:
 
 public:
 
-  PolyConnectivity()  {}
-  virtual ~PolyConnectivity() {}
+  PolyConnectivity();
+  virtual ~PolyConnectivity();
 
   inline static bool is_triangles()
   { return false; }

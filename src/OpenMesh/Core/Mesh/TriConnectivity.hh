@@ -52,8 +52,8 @@ class TriConnectivity : public PolyConnectivity
 {
 public:
 
-  TriConnectivity() {}
-  virtual ~TriConnectivity() {}
+  TriConnectivity();
+  virtual ~TriConnectivity();
 
   inline static bool is_triangles()
   { return true; }
