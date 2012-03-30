@@ -96,6 +96,7 @@ public:
   using PolyMesh::cfv_iter;
   using PolyMesh::point;
   using PolyMesh::halfedge_handle;
+  using PolyMesh::add_vertex;
 
   //@{
   /// Determine whether this is a PolyMeshT or TriMeshT ( This function does not check the per face vertex count! It only checks if the datatype is PolyMeshT or TriMeshT )

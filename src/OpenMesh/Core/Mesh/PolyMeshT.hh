@@ -101,6 +101,10 @@ public:
   using Kernel::is_boundary;
   using Kernel::face_handle;
   using Kernel::edge_handle;
+  using Kernel::cvih_iter;
+  using Kernel::valence;
+  using Kernel::cvoh_iter;
+  using Kernel::status;
 
   /// Self type. Used to specify iterators/circulators.
   typedef PolyMeshT<Kernel>                   This;
