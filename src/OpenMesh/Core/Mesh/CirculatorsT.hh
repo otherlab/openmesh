@@ -4,10 +4,10 @@
  *      Copyright (C) 2001-2010 by Computer Graphics Group, RWTH Aachen      *
  *                           www.openmesh.org                                *
  *                                                                           *
- *---------------------------------------------------------------------------* 
+ *---------------------------------------------------------------------------*
  *  This file is part of OpenMesh.                                           *
  *                                                                           *
- *  OpenMesh is free software: you can redistribute it and/or modify         * 
+ *  OpenMesh is free software: you can redistribute it and/or modify         *
  *  it under the terms of the GNU Lesser General Public License as           *
  *  published by the Free Software Foundation, either version 3 of           *
  *  the License, or (at your option) any later version with the              *
@@ -53,6 +53,7 @@
 
 #include <OpenMesh/Core/System/config.h>
 #include <assert.h>
+#include <cstddef>
 
 
 //== NAMESPACES ===============================================================
@@ -90,7 +91,7 @@ template <class Mesh> class ConstFaceFaceIterT;
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class VertexVertexIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -110,14 +111,14 @@ class VertexVertexIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Vertex&      reference;
   typedef const typename Mesh::Vertex*      pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Vertex&            reference;
@@ -132,7 +133,7 @@ class VertexVertexIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   VertexVertexIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -189,7 +190,7 @@ class VertexVertexIterT
   }
 #else
   friend class ConstVertexVertexIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -208,7 +209,7 @@ class VertexVertexIterT
 
 
   /// Pre-Increment (next cw target)
-  VertexVertexIterT& operator++() { 
+  VertexVertexIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -217,7 +218,7 @@ class VertexVertexIterT
 
 
   /// Pre-Decrement (next ccw target)
-  VertexVertexIterT& operator--() { 
+  VertexVertexIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -227,7 +228,7 @@ class VertexVertexIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -237,19 +238,19 @@ class VertexVertexIterT
   /// Return the handle of the current target.
   typename Mesh::VertexHandle handle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_);; 
+    return mesh_->to_vertex_handle(heh_);;
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::VertexHandle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_);; 
+    return mesh_->to_vertex_handle(heh_);;
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
@@ -284,7 +285,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstVertexVertexIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -304,14 +305,14 @@ class ConstVertexVertexIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Vertex&      reference;
   typedef const typename Mesh::Vertex*      pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Vertex&            reference;
@@ -326,7 +327,7 @@ class ConstVertexVertexIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   ConstVertexVertexIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -383,7 +384,7 @@ class ConstVertexVertexIterT
   }
 #else
   friend class ConstVertexVertexIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -402,7 +403,7 @@ class ConstVertexVertexIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstVertexVertexIterT& operator++() { 
+  ConstVertexVertexIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -411,7 +412,7 @@ class ConstVertexVertexIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstVertexVertexIterT& operator--() { 
+  ConstVertexVertexIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -421,7 +422,7 @@ class ConstVertexVertexIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -431,26 +432,26 @@ class ConstVertexVertexIterT
   /// Return the handle of the current target.
   typename Mesh::VertexHandle handle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_);; 
+    return mesh_->to_vertex_handle(heh_);;
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::VertexHandle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_);; 
+    return mesh_->to_vertex_handle(heh_);;
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -462,7 +463,7 @@ class ConstVertexVertexIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -498,14 +499,14 @@ class VertexOHalfedgeIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Halfedge&    reference;
   typedef const typename Mesh::Halfedge*    pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Halfedge&          reference;
@@ -520,7 +521,7 @@ class VertexOHalfedgeIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   VertexOHalfedgeIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -577,7 +578,7 @@ class VertexOHalfedgeIterT
   }
 #else
   friend class ConstVertexOHalfedgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -596,7 +597,7 @@ class VertexOHalfedgeIterT
 
 
   /// Pre-Increment (next cw target)
-  VertexOHalfedgeIterT& operator++() { 
+  VertexOHalfedgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -605,7 +606,7 @@ class VertexOHalfedgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  VertexOHalfedgeIterT& operator--() { 
+  VertexOHalfedgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -615,7 +616,7 @@ class VertexOHalfedgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -625,16 +626,16 @@ class VertexOHalfedgeIterT
   /// Return the handle of the current target.
   typename Mesh::HalfedgeHandle handle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::HalfedgeHandle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
-    
+
 
   ///  Return a reference to the current target.
   reference operator*() const {
@@ -644,7 +645,7 @@ class VertexOHalfedgeIterT
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -656,7 +657,7 @@ class VertexOHalfedgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -672,7 +673,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstVertexOHalfedgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -688,18 +689,18 @@ class ConstVertexOHalfedgeIterT
   typedef typename Mesh::HalfedgeHandle   HalfedgeHandle;
 
   typedef typename Mesh::Halfedge           value_type;
-  typedef typename Mesh::HalfedgeHandle         value_handle;
+  typedef typename Mesh::HalfedgeHandle     value_handle;
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Halfedge&    reference;
   typedef const typename Mesh::Halfedge*    pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Halfedge&          reference;
@@ -714,7 +715,7 @@ class ConstVertexOHalfedgeIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   ConstVertexOHalfedgeIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -771,7 +772,7 @@ class ConstVertexOHalfedgeIterT
   }
 #else
   friend class ConstVertexOHalfedgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -790,7 +791,7 @@ class ConstVertexOHalfedgeIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstVertexOHalfedgeIterT& operator++() { 
+  ConstVertexOHalfedgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -799,7 +800,7 @@ class ConstVertexOHalfedgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstVertexOHalfedgeIterT& operator--() { 
+  ConstVertexOHalfedgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -809,7 +810,7 @@ class ConstVertexOHalfedgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -819,26 +820,26 @@ class ConstVertexOHalfedgeIterT
   /// Return the handle of the current target.
   typename Mesh::HalfedgeHandle handle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::HalfedgeHandle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -850,7 +851,7 @@ class ConstVertexOHalfedgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -866,7 +867,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class VertexIHalfedgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -886,14 +887,14 @@ class VertexIHalfedgeIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Halfedge&    reference;
   typedef const typename Mesh::Halfedge*    pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Halfedge&          reference;
@@ -908,7 +909,7 @@ class VertexIHalfedgeIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   VertexIHalfedgeIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -965,7 +966,7 @@ class VertexIHalfedgeIterT
   }
 #else
   friend class ConstVertexIHalfedgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -984,7 +985,7 @@ class VertexIHalfedgeIterT
 
 
   /// Pre-Increment (next cw target)
-  VertexIHalfedgeIterT& operator++() { 
+  VertexIHalfedgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -993,7 +994,7 @@ class VertexIHalfedgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  VertexIHalfedgeIterT& operator--() { 
+  VertexIHalfedgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -1003,7 +1004,7 @@ class VertexIHalfedgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -1013,26 +1014,26 @@ class VertexIHalfedgeIterT
   /// Return the handle of the current target.
   typename Mesh::HalfedgeHandle handle() const {
     assert(mesh_);
-    return mesh_->opposite_halfedge_handle(heh_); 
+    return mesh_->opposite_halfedge_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::HalfedgeHandle() const {
     assert(mesh_);
-    return mesh_->opposite_halfedge_handle(heh_); 
+    return mesh_->opposite_halfedge_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -1044,7 +1045,7 @@ class VertexIHalfedgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -1080,14 +1081,14 @@ class ConstVertexIHalfedgeIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Halfedge&    reference;
   typedef const typename Mesh::Halfedge*    pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Halfedge&          reference;
@@ -1102,7 +1103,7 @@ class ConstVertexIHalfedgeIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   ConstVertexIHalfedgeIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -1159,7 +1160,7 @@ class ConstVertexIHalfedgeIterT
   }
 #else
   friend class ConstVertexIHalfedgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -1178,7 +1179,7 @@ class ConstVertexIHalfedgeIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstVertexIHalfedgeIterT& operator++() { 
+  ConstVertexIHalfedgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -1187,7 +1188,7 @@ class ConstVertexIHalfedgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstVertexIHalfedgeIterT& operator--() { 
+  ConstVertexIHalfedgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -1197,7 +1198,7 @@ class ConstVertexIHalfedgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -1207,26 +1208,26 @@ class ConstVertexIHalfedgeIterT
   /// Return the handle of the current target.
   typename Mesh::HalfedgeHandle handle() const {
     assert(mesh_);
-    return mesh_->opposite_halfedge_handle(heh_); 
+    return mesh_->opposite_halfedge_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::HalfedgeHandle() const {
     assert(mesh_);
-    return mesh_->opposite_halfedge_handle(heh_); 
+    return mesh_->opposite_halfedge_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -1238,7 +1239,7 @@ class ConstVertexIHalfedgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -1254,7 +1255,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class VertexEdgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -1274,14 +1275,14 @@ class VertexEdgeIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Edge&        reference;
   typedef const typename Mesh::Edge*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Edge&              reference;
@@ -1296,7 +1297,7 @@ class VertexEdgeIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   VertexEdgeIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -1353,7 +1354,7 @@ class VertexEdgeIterT
   }
 #else
   friend class ConstVertexEdgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -1372,7 +1373,7 @@ class VertexEdgeIterT
 
 
   /// Pre-Increment (next cw target)
-  VertexEdgeIterT& operator++() { 
+  VertexEdgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -1381,7 +1382,7 @@ class VertexEdgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  VertexEdgeIterT& operator--() { 
+  VertexEdgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -1391,7 +1392,7 @@ class VertexEdgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -1401,26 +1402,26 @@ class VertexEdgeIterT
   /// Return the handle of the current target.
   typename Mesh::EdgeHandle handle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::EdgeHandle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -1432,7 +1433,7 @@ class VertexEdgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -1448,7 +1449,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstVertexEdgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -1468,14 +1469,14 @@ class ConstVertexEdgeIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Edge&        reference;
   typedef const typename Mesh::Edge*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Edge&              reference;
@@ -1490,7 +1491,7 @@ class ConstVertexEdgeIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   ConstVertexEdgeIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -1547,7 +1548,7 @@ class ConstVertexEdgeIterT
   }
 #else
   friend class ConstVertexEdgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -1566,7 +1567,7 @@ class ConstVertexEdgeIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstVertexEdgeIterT& operator++() { 
+  ConstVertexEdgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->cw_rotated_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -1575,7 +1576,7 @@ class ConstVertexEdgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstVertexEdgeIterT& operator--() { 
+  ConstVertexEdgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->ccw_rotated_halfedge_handle(heh_);
@@ -1585,7 +1586,7 @@ class ConstVertexEdgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -1595,26 +1596,26 @@ class ConstVertexEdgeIterT
   /// Return the handle of the current target.
   typename Mesh::EdgeHandle handle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::EdgeHandle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -1626,7 +1627,7 @@ class ConstVertexEdgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -1642,7 +1643,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class VertexFaceIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -1662,14 +1663,14 @@ class VertexFaceIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Face&        reference;
   typedef const typename Mesh::Face*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Face&              reference;
@@ -1684,7 +1685,7 @@ class VertexFaceIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   VertexFaceIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -1741,7 +1742,7 @@ class VertexFaceIterT
   }
 #else
   friend class ConstVertexFaceIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -1760,7 +1761,7 @@ class VertexFaceIterT
 
 
   /// Pre-Increment (next cw target)
-  VertexFaceIterT& operator++() { 
+  VertexFaceIterT& operator++() {
     assert(mesh_);
     do { heh_=mesh_->cw_rotated_halfedge_handle(heh_); if(heh_ == start_) lap_counter_++; } while ((*this) && (!handle().is_valid()));;
     return *this;
@@ -1768,7 +1769,7 @@ class VertexFaceIterT
 
 
   /// Pre-Decrement (next ccw target)
-  VertexFaceIterT& operator--() { 
+  VertexFaceIterT& operator--() {
     assert(mesh_);
     do { if(heh_ == start_) lap_counter_--; heh_=mesh_->ccw_rotated_halfedge_handle(heh_); } while ((*this) && (!handle().is_valid()));;
     return *this;
@@ -1777,7 +1778,7 @@ class VertexFaceIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -1787,26 +1788,26 @@ class VertexFaceIterT
   /// Return the handle of the current target.
   typename Mesh::FaceHandle handle() const {
     assert(mesh_);
-    return mesh_->face_handle(heh_); 
+    return mesh_->face_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::FaceHandle() const {
     assert(mesh_);
-    return mesh_->face_handle(heh_); 
+    return mesh_->face_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -1818,7 +1819,7 @@ class VertexFaceIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -1834,7 +1835,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstVertexFaceIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -1854,14 +1855,14 @@ class ConstVertexFaceIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Face&        reference;
   typedef const typename Mesh::Face*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Face&              reference;
@@ -1876,7 +1877,7 @@ class ConstVertexFaceIterT
 
   /// Construct with mesh and a typename Mesh::VertexHandle
   ConstVertexFaceIterT(mesh_ref _mesh, typename Mesh::VertexHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -1933,7 +1934,7 @@ class ConstVertexFaceIterT
   }
 #else
   friend class ConstVertexFaceIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -1952,7 +1953,7 @@ class ConstVertexFaceIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstVertexFaceIterT& operator++() { 
+  ConstVertexFaceIterT& operator++() {
     assert(mesh_);
     do { heh_=mesh_->cw_rotated_halfedge_handle(heh_); if(heh_ == start_) lap_counter_++; }  while ((*this) && (!handle().is_valid()));;
     return *this;
@@ -1960,7 +1961,7 @@ class ConstVertexFaceIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstVertexFaceIterT& operator--() { 
+  ConstVertexFaceIterT& operator--() {
     assert(mesh_);
     do { if(heh_ == start_) lap_counter_--; heh_=mesh_->ccw_rotated_halfedge_handle(heh_); } while ((*this) && (!handle().is_valid()));;
     return *this;
@@ -1969,7 +1970,7 @@ class ConstVertexFaceIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -1979,26 +1980,26 @@ class ConstVertexFaceIterT
   /// Return the handle of the current target.
   typename Mesh::FaceHandle handle() const {
     assert(mesh_);
-    return mesh_->face_handle(heh_); 
+    return mesh_->face_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::FaceHandle() const {
     assert(mesh_);
-    return mesh_->face_handle(heh_); 
+    return mesh_->face_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -2010,7 +2011,7 @@ class ConstVertexFaceIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -2046,14 +2047,14 @@ class FaceVertexIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Vertex&      reference;
   typedef const typename Mesh::Vertex*      pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Vertex&            reference;
@@ -2068,7 +2069,7 @@ class FaceVertexIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   FaceVertexIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -2125,7 +2126,7 @@ class FaceVertexIterT
   }
 #else
   friend class ConstFaceVertexIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -2144,7 +2145,7 @@ class FaceVertexIterT
 
 
   /// Pre-Increment (next cw target)
-  FaceVertexIterT& operator++() { 
+  FaceVertexIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->next_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -2163,7 +2164,7 @@ class FaceVertexIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -2173,26 +2174,26 @@ class FaceVertexIterT
   /// Return the handle of the current target.
   typename Mesh::VertexHandle handle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_); 
+    return mesh_->to_vertex_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::VertexHandle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_); 
+    return mesh_->to_vertex_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -2204,7 +2205,7 @@ class FaceVertexIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -2220,7 +2221,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstFaceVertexIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -2240,14 +2241,14 @@ class ConstFaceVertexIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Vertex&      reference;
   typedef const typename Mesh::Vertex*      pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Vertex&            reference;
@@ -2262,7 +2263,7 @@ class ConstFaceVertexIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   ConstFaceVertexIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -2319,7 +2320,7 @@ class ConstFaceVertexIterT
   }
 #else
   friend class ConstFaceVertexIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -2338,7 +2339,7 @@ class ConstFaceVertexIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstFaceVertexIterT& operator++() { 
+  ConstFaceVertexIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->next_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -2347,7 +2348,7 @@ class ConstFaceVertexIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstFaceVertexIterT& operator--() { 
+  ConstFaceVertexIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->prev_halfedge_handle(heh_);
@@ -2357,7 +2358,7 @@ class ConstFaceVertexIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -2367,26 +2368,26 @@ class ConstFaceVertexIterT
   /// Return the handle of the current target.
   typename Mesh::VertexHandle handle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_); 
+    return mesh_->to_vertex_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::VertexHandle() const {
     assert(mesh_);
-    return mesh_->to_vertex_handle(heh_); 
+    return mesh_->to_vertex_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -2398,7 +2399,7 @@ class ConstFaceVertexIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -2414,7 +2415,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class FaceHalfedgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -2434,14 +2435,14 @@ class FaceHalfedgeIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Halfedge&    reference;
   typedef const typename Mesh::Halfedge*    pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Halfedge&          reference;
@@ -2456,7 +2457,7 @@ class FaceHalfedgeIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   FaceHalfedgeIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -2513,7 +2514,7 @@ class FaceHalfedgeIterT
   }
 #else
   friend class ConstFaceHalfedgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -2532,7 +2533,7 @@ class FaceHalfedgeIterT
 
 
   /// Pre-Increment (next cw target)
-  FaceHalfedgeIterT& operator++() { 
+  FaceHalfedgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->next_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -2541,7 +2542,7 @@ class FaceHalfedgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  FaceHalfedgeIterT& operator--() { 
+  FaceHalfedgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->prev_halfedge_handle(heh_);
@@ -2561,26 +2562,26 @@ class FaceHalfedgeIterT
   /// Return the handle of the current target.
   typename Mesh::HalfedgeHandle handle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::HalfedgeHandle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -2592,7 +2593,7 @@ class FaceHalfedgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -2608,7 +2609,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstFaceHalfedgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -2628,14 +2629,14 @@ class ConstFaceHalfedgeIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Halfedge&    reference;
   typedef const typename Mesh::Halfedge*    pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Halfedge&          reference;
@@ -2650,7 +2651,7 @@ class ConstFaceHalfedgeIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   ConstFaceHalfedgeIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -2707,7 +2708,7 @@ class ConstFaceHalfedgeIterT
   }
 #else
   friend class ConstFaceHalfedgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -2726,7 +2727,7 @@ class ConstFaceHalfedgeIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstFaceHalfedgeIterT& operator++() { 
+  ConstFaceHalfedgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->next_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -2735,7 +2736,7 @@ class ConstFaceHalfedgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstFaceHalfedgeIterT& operator--() { 
+  ConstFaceHalfedgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->prev_halfedge_handle(heh_);
@@ -2745,7 +2746,7 @@ class ConstFaceHalfedgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -2755,26 +2756,26 @@ class ConstFaceHalfedgeIterT
   /// Return the handle of the current target.
   typename Mesh::HalfedgeHandle handle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::HalfedgeHandle() const {
     assert(mesh_);
-    return heh_; 
+    return heh_;
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -2786,7 +2787,7 @@ class ConstFaceHalfedgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -2802,7 +2803,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class FaceEdgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -2822,14 +2823,14 @@ class FaceEdgeIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Edge&        reference;
   typedef const typename Mesh::Edge*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Edge&              reference;
@@ -2844,7 +2845,7 @@ class FaceEdgeIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   FaceEdgeIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -2901,7 +2902,7 @@ class FaceEdgeIterT
   }
 #else
   friend class ConstFaceEdgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -2920,7 +2921,7 @@ class FaceEdgeIterT
 
 
   /// Pre-Increment (next cw target)
-  FaceEdgeIterT& operator++() { 
+  FaceEdgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->next_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -2929,7 +2930,7 @@ class FaceEdgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  FaceEdgeIterT& operator--() { 
+  FaceEdgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->prev_halfedge_handle(heh_);
@@ -2939,7 +2940,7 @@ class FaceEdgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -2949,26 +2950,26 @@ class FaceEdgeIterT
   /// Return the handle of the current target.
   typename Mesh::EdgeHandle handle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::EdgeHandle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -2980,7 +2981,7 @@ class FaceEdgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -2996,7 +2997,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstFaceEdgeIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -3016,14 +3017,14 @@ class ConstFaceEdgeIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Edge&        reference;
   typedef const typename Mesh::Edge*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Edge&              reference;
@@ -3038,7 +3039,7 @@ class ConstFaceEdgeIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   ConstFaceEdgeIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -3095,7 +3096,7 @@ class ConstFaceEdgeIterT
   }
 #else
   friend class ConstFaceEdgeIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -3114,7 +3115,7 @@ class ConstFaceEdgeIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstFaceEdgeIterT& operator++() { 
+  ConstFaceEdgeIterT& operator++() {
     assert(mesh_);
     heh_=mesh_->next_halfedge_handle(heh_);
     if(heh_ == start_) lap_counter_++;
@@ -3123,7 +3124,7 @@ class ConstFaceEdgeIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstFaceEdgeIterT& operator--() { 
+  ConstFaceEdgeIterT& operator--() {
     assert(mesh_);
     if(heh_ == start_) lap_counter_--;
     heh_=mesh_->prev_halfedge_handle(heh_);
@@ -3133,7 +3134,7 @@ class ConstFaceEdgeIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -3143,26 +3144,26 @@ class ConstFaceEdgeIterT
   /// Return the handle of the current target.
   typename Mesh::EdgeHandle handle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::EdgeHandle() const {
     assert(mesh_);
-    return mesh_->edge_handle(heh_); 
+    return mesh_->edge_handle(heh_);
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -3174,7 +3175,7 @@ class ConstFaceEdgeIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -3190,7 +3191,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class FaceFaceIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -3210,14 +3211,14 @@ class FaceFaceIterT
 
 #if 0
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Face&        reference;
   typedef const typename Mesh::Face*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Face&              reference;
@@ -3232,7 +3233,7 @@ class FaceFaceIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   FaceFaceIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -3289,7 +3290,7 @@ class FaceFaceIterT
   }
 #else
   friend class ConstFaceFaceIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -3308,7 +3309,7 @@ class FaceFaceIterT
 
 
   /// Pre-Increment (next cw target)
-  FaceFaceIterT& operator++() { 
+  FaceFaceIterT& operator++() {
     assert(mesh_);
     do { heh_=mesh_->next_halfedge_handle(heh_); if(heh_ == start_) lap_counter_++; } while ((*this) && (!handle().is_valid()));
     return *this;
@@ -3316,7 +3317,7 @@ class FaceFaceIterT
 
 
   /// Pre-Decrement (next ccw target)
-  FaceFaceIterT& operator--() { 
+  FaceFaceIterT& operator--() {
     assert(mesh_);
     do { if(heh_ == start_) lap_counter_--; heh_=mesh_->prev_halfedge_handle(heh_); } while ((*this) && (!handle().is_valid()));
     return *this;
@@ -3325,7 +3326,7 @@ class FaceFaceIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -3335,19 +3336,19 @@ class FaceFaceIterT
   /// Return the handle of the current target.
   typename Mesh::FaceHandle handle() const {
     assert(mesh_);
-    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_)); 
+    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_));
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::FaceHandle() const {
     assert(mesh_);
-    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_)); 
+    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_));
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
@@ -3366,7 +3367,7 @@ class FaceFaceIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 
@@ -3382,7 +3383,7 @@ protected:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstFaceFaceIterT CirculatorsT.hh <OpenMesh/Mesh/Iterators/CirculatorsT.hh>
     Circulator.
 */
@@ -3402,14 +3403,14 @@ class ConstFaceFaceIterT
 
 #if 1
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef const Mesh&                       mesh_ref;
   typedef const Mesh*                       mesh_ptr;
   typedef const typename Mesh::Face&        reference;
   typedef const typename Mesh::Face*        pointer;
 #else
   typedef std::bidirectional_iterator_tag   iterator_category;
-  typedef ptrdiff_t                         difference_type;
+  typedef std::ptrdiff_t                    difference_type;
   typedef Mesh&                             mesh_ref;
   typedef Mesh*                             mesh_ptr;
   typedef typename Mesh::Face&              reference;
@@ -3424,7 +3425,7 @@ class ConstFaceFaceIterT
 
   /// Construct with mesh and a typename Mesh::FaceHandle
   ConstFaceFaceIterT(mesh_ref _mesh, typename Mesh::FaceHandle _start, bool _end = false) :
-    mesh_(&_mesh), 
+    mesh_(&_mesh),
     start_(_mesh.halfedge_handle(_start)),
     heh_(start_),
     lap_counter_(_end)
@@ -3481,7 +3482,7 @@ class ConstFaceFaceIterT
   }
 #else
   friend class ConstFaceFaceIterT<Mesh>;
-#endif  
+#endif
 
 
   /// Equal ?
@@ -3500,7 +3501,7 @@ class ConstFaceFaceIterT
 
 
   /// Pre-Increment (next cw target)
-  ConstFaceFaceIterT& operator++() { 
+  ConstFaceFaceIterT& operator++() {
     assert(mesh_);
     do { heh_=mesh_->next_halfedge_handle(heh_); if(heh_ == start_) lap_counter_++; } while ((*this) && (!handle().is_valid()));;
     return *this;
@@ -3508,7 +3509,7 @@ class ConstFaceFaceIterT
 
 
   /// Pre-Decrement (next ccw target)
-  ConstFaceFaceIterT& operator--() { 
+  ConstFaceFaceIterT& operator--() {
     assert(mesh_);
     do { if(heh_ == start_) lap_counter_--; heh_=mesh_->prev_halfedge_handle(heh_); } while ((*this) && (!handle().is_valid()));;
     return *this;
@@ -3517,7 +3518,7 @@ class ConstFaceFaceIterT
 
   /** Get the current halfedge. There are \c Vertex*Iters and \c
       Face*Iters.  For both the current state is defined by the
-      current halfedge. This is what this method returns. 
+      current halfedge. This is what this method returns.
   */
   HalfedgeHandle current_halfedge_handle() const {
     return heh_;
@@ -3527,26 +3528,26 @@ class ConstFaceFaceIterT
   /// Return the handle of the current target.
   typename Mesh::FaceHandle handle() const {
     assert(mesh_);
-    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_)); 
+    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_));
   }
 
 
   /// Cast to the handle of the current target.
   operator typename Mesh::FaceHandle() const {
     assert(mesh_);
-    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_)); 
+    return mesh_->face_handle(mesh_->opposite_halfedge_handle(heh_));
   }
-    
+
 
   ///  Return a reference to the current target.
-  reference operator*() const { 
+  reference operator*() const {
     assert(mesh_);
     return mesh_->deref(handle());
   }
 
 
   /// Return a pointer to the current target.
-  pointer operator->() const { 
+  pointer operator->() const {
     assert(mesh_);
     return &mesh_->deref(handle());
   }
@@ -3558,7 +3559,7 @@ class ConstFaceFaceIterT
       can continue circulating. This method just tells you whether you
       have completed the first round.
    */
-  operator bool() const { 
+  operator bool() const {
     return heh_.is_valid() && ((start_ != heh_) || (lap_counter_ == 0));
   }
 

@@ -4,10 +4,10 @@
  *      Copyright (C) 2001-2010 by Computer Graphics Group, RWTH Aachen      *
  *                           www.openmesh.org                                *
  *                                                                           *
- *---------------------------------------------------------------------------* 
+ *---------------------------------------------------------------------------*
  *  This file is part of OpenMesh.                                           *
  *                                                                           *
- *  OpenMesh is free software: you can redistribute it and/or modify         * 
+ *  OpenMesh is free software: you can redistribute it and/or modify         *
  *  it under the terms of the GNU Lesser General Public License as           *
  *  published by the Free Software Foundation, either version 3 of           *
  *  the License, or (at your option) any later version with the              *
@@ -55,6 +55,8 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Mesh/Status.hh>
 #include <assert.h>
+#include <cstddef>
+
 
 
 //== NAMESPACES ===============================================================
@@ -80,7 +82,7 @@ template <class Mesh> class ConstFaceIterT;
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class VertexIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -89,7 +91,7 @@ template <class Mesh>
 class VertexIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -98,14 +100,14 @@ public:
 
 #if 0
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -114,30 +116,30 @@ public:
 
 
   /// Default constructor.
-  VertexIterT() 
-    : mesh_(0), skip_bits_(0) 
+  VertexIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  VertexIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  VertexIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set vertex handle invalid if the mesh contains no vertex
     if(_mesh.n_vertices() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  VertexIterT(const VertexIterT& _rhs) 
+  VertexIterT(const VertexIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  VertexIterT& operator=(const VertexIterT<Mesh>& _rhs) 
+  VertexIterT& operator=(const VertexIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -149,13 +151,13 @@ public:
 #if 0
 
   /// Construct from a non-const iterator
-  VertexIterT(const VertexIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  VertexIterT(const VertexIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  VertexIterT& operator=(const VertexIterT<Mesh>& _rhs) 
+  VertexIterT& operator=(const VertexIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -170,10 +172,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -181,21 +183,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const VertexIterT& _rhs) const 
+  bool operator==(const VertexIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const VertexIterT& _rhs) const 
+  bool operator!=(const VertexIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  VertexIterT& operator++() 
+  VertexIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  VertexIterT& operator--() 
+  VertexIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -219,19 +221,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_vertices()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_vertices()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -247,7 +249,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstVertexIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -256,7 +258,7 @@ template <class Mesh>
 class ConstVertexIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -265,14 +267,14 @@ public:
 
 #if 1
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -283,30 +285,30 @@ public:
 
 
   /// Default constructor.
-  ConstVertexIterT() 
-    : mesh_(0), skip_bits_(0) 
+  ConstVertexIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  ConstVertexIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  ConstVertexIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set vertex handle invalid if the mesh contains no vertex
     if(_mesh.n_vertices() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  ConstVertexIterT(const ConstVertexIterT& _rhs) 
+  ConstVertexIterT(const ConstVertexIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  ConstVertexIterT& operator=(const ConstVertexIterT<Mesh>& _rhs) 
+  ConstVertexIterT& operator=(const ConstVertexIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -318,13 +320,13 @@ public:
 #if 1
 
   /// Construct from a non-const iterator
-  ConstVertexIterT(const VertexIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  ConstVertexIterT(const VertexIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  ConstVertexIterT& operator=(const VertexIterT<Mesh>& _rhs) 
+  ConstVertexIterT& operator=(const VertexIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -339,10 +341,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -350,21 +352,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const ConstVertexIterT& _rhs) const 
+  bool operator==(const ConstVertexIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const ConstVertexIterT& _rhs) const 
+  bool operator!=(const ConstVertexIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  ConstVertexIterT& operator++() 
+  ConstVertexIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  ConstVertexIterT& operator--() 
+  ConstVertexIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -388,19 +390,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_vertices()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_vertices()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -416,7 +418,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class HalfedgeIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -425,7 +427,7 @@ template <class Mesh>
 class HalfedgeIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -434,14 +436,14 @@ public:
 
 #if 0
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -452,30 +454,30 @@ public:
 
 
   /// Default constructor.
-  HalfedgeIterT() 
-    : mesh_(0), skip_bits_(0) 
+  HalfedgeIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  HalfedgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  HalfedgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set halfedge handle invalid if the mesh contains no edge
     if(_mesh.n_edges() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  HalfedgeIterT(const HalfedgeIterT& _rhs) 
+  HalfedgeIterT(const HalfedgeIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  HalfedgeIterT& operator=(const HalfedgeIterT<Mesh>& _rhs) 
+  HalfedgeIterT& operator=(const HalfedgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -487,13 +489,13 @@ public:
 #if 0
 
   /// Construct from a non-const iterator
-  HalfedgeIterT(const HalfedgeIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  HalfedgeIterT(const HalfedgeIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  HalfedgeIterT& operator=(const HalfedgeIterT<Mesh>& _rhs) 
+  HalfedgeIterT& operator=(const HalfedgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -508,10 +510,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -519,21 +521,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const HalfedgeIterT& _rhs) const 
+  bool operator==(const HalfedgeIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const HalfedgeIterT& _rhs) const 
+  bool operator!=(const HalfedgeIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  HalfedgeIterT& operator++() 
+  HalfedgeIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  HalfedgeIterT& operator--() 
+  HalfedgeIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -557,19 +559,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_halfedges()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_halfedges()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -585,7 +587,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstHalfedgeIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -594,7 +596,7 @@ template <class Mesh>
 class ConstHalfedgeIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -603,14 +605,14 @@ public:
 
 #if 1
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -621,30 +623,30 @@ public:
 
 
   /// Default constructor.
-  ConstHalfedgeIterT() 
-    : mesh_(0), skip_bits_(0) 
+  ConstHalfedgeIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  ConstHalfedgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  ConstHalfedgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set halfedge handle invalid if the mesh contains no edge
     if(_mesh.n_edges() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  ConstHalfedgeIterT(const ConstHalfedgeIterT& _rhs) 
+  ConstHalfedgeIterT(const ConstHalfedgeIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  ConstHalfedgeIterT& operator=(const ConstHalfedgeIterT<Mesh>& _rhs) 
+  ConstHalfedgeIterT& operator=(const ConstHalfedgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -656,13 +658,13 @@ public:
 #if 1
 
   /// Construct from a non-const iterator
-  ConstHalfedgeIterT(const HalfedgeIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  ConstHalfedgeIterT(const HalfedgeIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  ConstHalfedgeIterT& operator=(const HalfedgeIterT<Mesh>& _rhs) 
+  ConstHalfedgeIterT& operator=(const HalfedgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -677,10 +679,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -688,21 +690,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const ConstHalfedgeIterT& _rhs) const 
+  bool operator==(const ConstHalfedgeIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const ConstHalfedgeIterT& _rhs) const 
+  bool operator!=(const ConstHalfedgeIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  ConstHalfedgeIterT& operator++() 
+  ConstHalfedgeIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  ConstHalfedgeIterT& operator--() 
+  ConstHalfedgeIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -726,19 +728,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_halfedges()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_halfedges()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -754,7 +756,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class EdgeIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -763,7 +765,7 @@ template <class Mesh>
 class EdgeIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -772,14 +774,14 @@ public:
 
 #if 0
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -790,30 +792,30 @@ public:
 
 
   /// Default constructor.
-  EdgeIterT() 
-    : mesh_(0), skip_bits_(0) 
+  EdgeIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  EdgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  EdgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set halfedge handle invalid if the mesh contains no edge
     if(_mesh.n_edges() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  EdgeIterT(const EdgeIterT& _rhs) 
+  EdgeIterT(const EdgeIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  EdgeIterT& operator=(const EdgeIterT<Mesh>& _rhs) 
+  EdgeIterT& operator=(const EdgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -825,13 +827,13 @@ public:
 #if 0
 
   /// Construct from a non-const iterator
-  EdgeIterT(const EdgeIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  EdgeIterT(const EdgeIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  EdgeIterT& operator=(const EdgeIterT<Mesh>& _rhs) 
+  EdgeIterT& operator=(const EdgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -846,10 +848,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -857,21 +859,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const EdgeIterT& _rhs) const 
+  bool operator==(const EdgeIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const EdgeIterT& _rhs) const 
+  bool operator!=(const EdgeIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  EdgeIterT& operator++() 
+  EdgeIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  EdgeIterT& operator--() 
+  EdgeIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -895,19 +897,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_edges()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_edges()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -923,7 +925,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstEdgeIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -932,7 +934,7 @@ template <class Mesh>
 class ConstEdgeIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -941,14 +943,14 @@ public:
 
 #if 1
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -959,30 +961,30 @@ public:
 
 
   /// Default constructor.
-  ConstEdgeIterT() 
-    : mesh_(0), skip_bits_(0) 
+  ConstEdgeIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  ConstEdgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  ConstEdgeIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set halfedge handle invalid if the mesh contains no edge
     if(_mesh.n_edges() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  ConstEdgeIterT(const ConstEdgeIterT& _rhs) 
+  ConstEdgeIterT(const ConstEdgeIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  ConstEdgeIterT& operator=(const ConstEdgeIterT<Mesh>& _rhs) 
+  ConstEdgeIterT& operator=(const ConstEdgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -994,13 +996,13 @@ public:
 #if 1
 
   /// Construct from a non-const iterator
-  ConstEdgeIterT(const EdgeIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  ConstEdgeIterT(const EdgeIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  ConstEdgeIterT& operator=(const EdgeIterT<Mesh>& _rhs) 
+  ConstEdgeIterT& operator=(const EdgeIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -1015,10 +1017,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -1026,21 +1028,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const ConstEdgeIterT& _rhs) const 
+  bool operator==(const ConstEdgeIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const ConstEdgeIterT& _rhs) const 
+  bool operator!=(const ConstEdgeIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  ConstEdgeIterT& operator++() 
+  ConstEdgeIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  ConstEdgeIterT& operator--() 
+  ConstEdgeIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -1064,19 +1066,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_edges()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_edges()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -1092,7 +1094,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class FaceIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -1101,7 +1103,7 @@ template <class Mesh>
 class FaceIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -1110,14 +1112,14 @@ public:
 
 #if 0
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -1128,30 +1130,30 @@ public:
 
 
   /// Default constructor.
-  FaceIterT() 
-    : mesh_(0), skip_bits_(0) 
+  FaceIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  FaceIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  FaceIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set face handle invalid if the mesh contains no faces
     if(_mesh.n_faces() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  FaceIterT(const FaceIterT& _rhs) 
+  FaceIterT(const FaceIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  FaceIterT& operator=(const FaceIterT<Mesh>& _rhs) 
+  FaceIterT& operator=(const FaceIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -1163,13 +1165,13 @@ public:
 #if 0
 
   /// Construct from a non-const iterator
-  FaceIterT(const FaceIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  FaceIterT(const FaceIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  FaceIterT& operator=(const FaceIterT<Mesh>& _rhs) 
+  FaceIterT& operator=(const FaceIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -1184,10 +1186,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -1195,21 +1197,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const FaceIterT& _rhs) const 
+  bool operator==(const FaceIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const FaceIterT& _rhs) const 
+  bool operator!=(const FaceIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  FaceIterT& operator++() 
+  FaceIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  FaceIterT& operator--() 
+  FaceIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -1233,19 +1235,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_faces()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_faces()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -1261,7 +1263,7 @@ private:
 
 //== CLASS DEFINITION =========================================================
 
-	      
+
 /** \class ConstFaceIterT IteratorsT.hh <OpenMesh/Mesh/Iterators/IteratorsT.hh>
     Linear iterator.
 */
@@ -1270,7 +1272,7 @@ template <class Mesh>
 class ConstFaceIterT
 {
 public:
-  
+
 
   //--- Typedefs ---
 
@@ -1279,14 +1281,14 @@ public:
 
 #if 1
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef const value_type&    reference;
   typedef const value_type*    pointer;
   typedef const Mesh*          mesh_ptr;
   typedef const Mesh&          mesh_ref;
 #else
   typedef std::bidirectional_iterator_tag iterator_category;
-  typedef ptrdiff_t            difference_type;
+  typedef std::ptrdiff_t       difference_type;
   typedef value_type&          reference;
   typedef value_type*          pointer;
   typedef Mesh*                mesh_ptr;
@@ -1297,30 +1299,30 @@ public:
 
 
   /// Default constructor.
-  ConstFaceIterT() 
-    : mesh_(0), skip_bits_(0) 
+  ConstFaceIterT()
+    : mesh_(0), skip_bits_(0)
   {}
 
 
-  /// Construct with mesh and a target handle. 
-  ConstFaceIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false) 
-    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0) 
+  /// Construct with mesh and a target handle.
+  ConstFaceIterT(mesh_ref _mesh, value_handle _hnd, bool _skip=false)
+    : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
   {
     if (_skip) enable_skipping();
-    
+
     // Set face handle invalid if the mesh contains no faces
     if(_mesh.n_faces() == 0) hnd_ = value_handle(-1);
   }
 
 
   /// Copy constructor
-  ConstFaceIterT(const ConstFaceIterT& _rhs) 
+  ConstFaceIterT(const ConstFaceIterT& _rhs)
     : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment operator
-  ConstFaceIterT& operator=(const ConstFaceIterT<Mesh>& _rhs) 
+  ConstFaceIterT& operator=(const ConstFaceIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -1332,13 +1334,13 @@ public:
 #if 1
 
   /// Construct from a non-const iterator
-  ConstFaceIterT(const FaceIterT<Mesh>& _rhs) 
-    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_) 
+  ConstFaceIterT(const FaceIterT<Mesh>& _rhs)
+    : mesh_(_rhs.mesh_), hnd_(_rhs.hnd_), skip_bits_(_rhs.skip_bits_)
   {}
-  
+
 
   /// Assignment from non-const iterator
-  ConstFaceIterT& operator=(const FaceIterT<Mesh>& _rhs) 
+  ConstFaceIterT& operator=(const FaceIterT<Mesh>& _rhs)
   {
     mesh_      = _rhs.mesh_;
     hnd_       = _rhs.hnd_;
@@ -1353,10 +1355,10 @@ public:
 
   /// Standard dereferencing operator.
   reference operator*()  const { return mesh_->deref(hnd_); }
-  
+
   /// Standard pointer operator.
   pointer   operator->() const { return &(mesh_->deref(hnd_)); }
-  
+
   /// Get the handle of the item the iterator refers to.
   value_handle handle() const { return hnd_; }
 
@@ -1364,21 +1366,21 @@ public:
   operator value_handle() const { return hnd_; }
 
   /// Are two iterators equal? Only valid if they refer to the same mesh!
-  bool operator==(const ConstFaceIterT& _rhs) const 
+  bool operator==(const ConstFaceIterT& _rhs) const
   { return ((mesh_ == _rhs.mesh_) && (hnd_ == _rhs.hnd_)); }
 
   /// Not equal?
-  bool operator!=(const ConstFaceIterT& _rhs) const 
+  bool operator!=(const ConstFaceIterT& _rhs) const
   { return !operator==(_rhs); }
-  
+
   /// Standard pre-increment operator
-  ConstFaceIterT& operator++() 
+  ConstFaceIterT& operator++()
   { hnd_.__increment(); if (skip_bits_) skip_fwd(); return *this; }
 
   /// Standard pre-decrement operator
-  ConstFaceIterT& operator--() 
+  ConstFaceIterT& operator--()
   { hnd_.__decrement(); if (skip_bits_) skip_bwd(); return *this; }
-  
+
 
   /// Turn on skipping: automatically skip deleted/hidden elements
   void enable_skipping()
@@ -1402,19 +1404,19 @@ public:
 
 private:
 
-  void skip_fwd() 
+  void skip_fwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() < (signed) mesh_->n_faces()) && 
+    while ((hnd_.idx() < (signed) mesh_->n_faces()) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__increment();
   }
 
 
-  void skip_bwd() 
+  void skip_bwd()
   {
     assert(mesh_ && skip_bits_);
-    while ((hnd_.idx() >= 0) && 
+    while ((hnd_.idx() >= 0) &&
 	   (mesh_->status(hnd_).bits() & skip_bits_))
       hnd_.__decrement();
   }
@@ -1432,5 +1434,5 @@ private:
 } // namespace Iterators
 } // namespace OpenMesh
 //=============================================================================
-#endif 
+#endif
 //=============================================================================
