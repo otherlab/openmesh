@@ -108,7 +108,7 @@ public:
       that were available
   */
   virtual bool read(const std::string& _filename, 
-		    BaseImporter& _bi,
+                    BaseImporter& _bi,
                     Options& _opt) = 0;
 		
  /** Reads a mesh given by a std::stream. This method usually uses the same stream reading method
@@ -116,7 +116,7 @@ public:
       that were available
   */
   virtual bool read(std::istream& _is, 
-		    BaseImporter& _bi,
+                    BaseImporter& _bi,
                     Options& _opt) = 0;
 
 

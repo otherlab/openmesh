@@ -494,9 +494,13 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
                 value = normals.size() + value + 1;
               }
               assert(!vhandles.empty());
-              assert((unsigned int)(value-1) < normals.size());
-              // Obj counts from 1 and not zero .. array counts from zero therefore -1
-              _bi.set_normal(vhandles.back(), normals[value-1]);
+              if ( ! normals.empty() && (unsigned int)(value-1) < normals.size() ) {
+                // Obj counts from 1 and not zero .. array counts from zero therefore -1
+                _bi.set_normal(vhandles.back(), normals[value-1]);
+              } else {
+                omerr() << "Error setting normal" << std::endl;
+              }
+
               break;
           }
 
