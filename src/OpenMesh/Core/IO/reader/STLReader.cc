@@ -339,6 +339,7 @@ read_stlb(const std::string& _filename, BaseImporter& _bi) const
     --nT;
   }
 
+  fclose(in);
   return true;
 }
 

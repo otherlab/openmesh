@@ -4,10 +4,10 @@
  *      Copyright (C) 2001-2010 by Computer Graphics Group, RWTH Aachen      *
  *                           www.openmesh.org                                *
  *                                                                           *
- *---------------------------------------------------------------------------* 
+ *---------------------------------------------------------------------------*
  *  This file is part of OpenMesh.                                           *
  *                                                                           *
- *  OpenMesh is free software: you can redistribute it and/or modify         * 
+ *  OpenMesh is free software: you can redistribute it and/or modify         *
  *  it under the terms of the GNU Lesser General Public License as           *
  *  published by the Free Software Foundation, either version 3 of           *
  *  the License, or (at your option) any later version with the              *
@@ -105,7 +105,7 @@ write(const std::string& _filename, BaseExporter& _be, Options _opt) const
   }
   else if (_filename.rfind(".stl") != std::string::npos)
   {
-    return (_opt.check( Options::Binary ) 
+    return (_opt.check( Options::Binary )
 	    ? write_stlb(_filename, _be, _opt)
 	    : write_stla(_filename, _be, _opt) );
   }
@@ -140,7 +140,7 @@ write_stla(const std::string& _filename, BaseExporter& _be, Options /* _opt */) 
   FILE* out = fopen(_filename.c_str(), "w");
   if (!out)
   {
-    omerr() << "[STLWriter] : cannot open file " << _filename << std::endl;
+    omerr() << "[STLWriter] : cannot open file " << _filename << ", " << strerror(errno) << std::endl;
     return false;
   }
 
@@ -205,7 +205,7 @@ write_stlb(const std::string& _filename, BaseExporter& _be, Options /* _opt */) 
   FILE* out = fopen(_filename.c_str(), "wb");
   if (!out)
   {
-    omerr() << "[STLWriter] : cannot open file " << _filename << std::endl;
+    omerr() << "[STLWriter] : cannot open file " << _filename << ", " << strerror(errno) << std::endl;
     return false;
   }
 
