@@ -75,18 +75,7 @@ namespace OpenMesh {
 
 /// Cast one color vector to another.
 template <typename dst_t, typename src_t>
-struct color_caster
-{
-  typedef dst_t  return_type;
-
-  inline static return_type cast(const src_t& _src)
-  {
-    dst_t dst;
-    vector_copy(_src, dst, GenProg::Int2Type<vector_traits<dst_t>::size_>());
-    return dst;
-  }
-};
-
+struct color_caster;
 
 template <>
 struct color_caster<Vec3uc,Vec3f>
