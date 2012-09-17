@@ -78,6 +78,17 @@ template <typename dst_t, typename src_t>
 struct color_caster;
 
 template <>
+struct color_caster<Vec3uc,Vec4uc>
+{
+  typedef Vec3uc return_type;
+
+  inline static return_type cast(const Vec4uc& _src)
+  {
+    return Vec3uc(_src[0],_src[1],_src[2]);
+  }
+};
+
+template <>
 struct color_caster<Vec3uc,Vec3f>
 {
   typedef Vec3uc return_type;
