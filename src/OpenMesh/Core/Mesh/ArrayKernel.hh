@@ -113,7 +113,7 @@ public:
   
   // --- handle -> item ---
   VertexHandle handle(const Vertex& _v) const
-  {return VertexHandle(&_v - &vertices_.front()); }
+  {return VertexHandle(int(&_v - &vertices_.front())); }
 
   HalfedgeHandle handle(const Halfedge& _he) const
   {
@@ -121,7 +121,7 @@ public:
     // There are two halfedges stored per edge
     // Get memory position inside edge vector and devide by size of an edge
     // to get the corresponding edge for the requested halfedge
-    uint eh = ( (char*)&_he - (char*)&edges_.front() ) /  sizeof(Edge)  ;
+    uint eh = uint(((char*)&_he - (char*)&edges_.front() ) /  sizeof(Edge));
     assert((&_he == &edges_[eh].halfedges_[0]) ||
            (&_he == &edges_[eh].halfedges_[1]));
     return ((&_he == &edges_[eh].halfedges_[0]) ?
@@ -129,10 +129,10 @@ public:
   }
 
   EdgeHandle handle(const Edge& _e) const 
-  { return EdgeHandle(&_e - &edges_.front()); }
+  { return EdgeHandle(int(&_e - &edges_.front())); }
 
   FaceHandle handle(const Face& _f) const 
-  { return FaceHandle(&_f - &faces_.front()); }
+  { return FaceHandle(int(&_f - &faces_.front())); }
 
 #define SIGNED(x) signed( (x) )
   //checks handle validity - useful for debugging
@@ -265,10 +265,10 @@ public:
   void clear();
 
   // --- number of items ---
-  uint n_vertices()  const { return vertices_.size(); }
-  uint n_halfedges() const { return 2*edges_.size(); }
-  uint n_edges()     const { return edges_.size(); }
-  uint n_faces()     const { return faces_.size(); }
+  uint n_vertices()  const { return (uint)vertices_.size(); }
+  uint n_halfedges() const { return 2*(uint)edges_.size(); }
+  uint n_edges()     const { return (uint)edges_.size(); }
+  uint n_faces()     const { return (uint)faces_.size(); }
 
   bool vertices_empty()  const { return vertices_.empty(); }
   bool halfedges_empty() const { return edges_.empty(); }

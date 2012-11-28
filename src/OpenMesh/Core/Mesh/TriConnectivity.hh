@@ -77,7 +77,7 @@ public:
       triangles will be triangulated and added. In this case an
       invalid face handle will be returned.  */
   FaceHandle add_face(const std::vector<VertexHandle>& _vhandles)
-  { return add_face(&_vhandles.front(), _vhandles.size()); }
+  { return add_face(&_vhandles.front(), (uint)_vhandles.size()); }
   
   FaceHandle add_face(const VertexHandle* _vhandles, uint _vhs_size);
   

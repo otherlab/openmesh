@@ -188,7 +188,7 @@ public:
   * @param _vhandles sorted list of vertex handles (also defines order in which the vertices are added to the face)
   */
   FaceHandle add_face(const std::vector<VertexHandle>& _vhandles)
-  { return add_face(&_vhandles.front(), _vhandles.size()); }
+  { return add_face(&_vhandles.front(), (uint)_vhandles.size()); }
  
    
   /** \brief Add and connect a new face
