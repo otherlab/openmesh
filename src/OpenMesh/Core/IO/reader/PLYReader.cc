@@ -866,7 +866,7 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
         return false;
     }
 
-    unsigned int streamPos = _is.tellg();
+    unsigned int streamPos = (unsigned)_is.tellg();
     _is >> keyword;
     while (keyword != "end_header") {
 
@@ -991,7 +991,7 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
             omlog() << "Unsupported keyword : " << keyword << std::endl;
         }
 
-        streamPos = _is.tellg();
+        streamPos = (unsigned)_is.tellg();
         _is >> keyword;
         if (_is.bad()) {
             omerr() << "Error while reading PLY file header" << std::endl;

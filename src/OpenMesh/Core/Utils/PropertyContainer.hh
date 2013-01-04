@@ -43,7 +43,7 @@
 #define OPENMESH_PROPERTYCONTAINER
 
 // Use static casts when not debugging
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(OM_FORCE_STATIC_CAST)
 #define OM_FORCE_STATIC_CAST
 #endif
 

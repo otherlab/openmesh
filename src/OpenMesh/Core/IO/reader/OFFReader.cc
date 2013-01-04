@@ -587,7 +587,7 @@ bool _OFFReader_::can_u_read(std::istream& _is) const
   _is.getline(line, LINE_LEN);
   p = line;
 
-  int remainingChars = _is.gcount();
+  int remainingChars = (int)_is.gcount();
 
   bool vertexDimensionTooHigh = false;
 
