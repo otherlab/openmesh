@@ -147,7 +147,7 @@ macro (acg_qt4)
     set (QT_USE_QTXML 1)
     set (QT_USE_QTHELP 1)
     set (QT_USE_QTWEBKIT 1)
-    set (QT_USE_QTUITOOLS 1)
+    #set (QT_USE_QTUITOOLS 1)
 
     include (${QT_USE_FILE})
   endif ()
